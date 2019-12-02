@@ -372,7 +372,7 @@ TEST_F(OptionsSettableTest, ColumnFamilyOptionsAllFieldsSettable) {
   // It based on the behavior of compiler that padding bytes are not changed
   // when copying the struct. It's prone to failure when compiler behavior
   // changes. We verify there is unset bytes to detect the case.
-  *options = ColumnFamilyOptions();
+  new (options) ColumnFamilyOptions();
 
   // Deprecatd option which is not initialized. Need to set it to avoid
   // Valgrind error
@@ -390,9 +390,9 @@ TEST_F(OptionsSettableTest, ColumnFamilyOptionsAllFieldsSettable) {
   // Following options are not settable through
   // GetColumnFamilyOptionsFromString():
   options->rate_limit_delay_max_milliseconds = 33;
-  options->compaction_options_universal = CompactionOptionsUniversal();
-  options->compression_opts = CompressionOptions();
-  options->bottommost_compression_opts = CompressionOptions();
+  new (&options->compaction_options_universal) CompactionOptionsUniversal();
+  new (&options->compression_opts) CompressionOptions();
+  new (&options->bottommost_compression_opts) CompressionOptions();
   options->hard_rate_limit = 0;
   options->soft_rate_limit = 0;
   options->purge_redundant_kvs_while_flush = false;
