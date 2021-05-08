@@ -2092,6 +2092,7 @@ class Stats {
     if (FLAGS_histogram) {
       uint64_t now = clock_->NowMicros();
       uint64_t micros = now - last_op_finish_;
+      last_op_finish_ = now;
 
       if (hist_.find(op_type) == hist_.end())
       {
@@ -2104,7 +2105,6 @@ class Stats {
         fprintf(stderr, "long op: %" PRIu64 " micros%30s\r", micros, "");
         fflush(stderr);
       }
-      last_op_finish_ = now;
     }
 
     done_ += num_ops;
